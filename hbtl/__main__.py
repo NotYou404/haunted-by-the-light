@@ -2,6 +2,7 @@ import random
 from pathlib import Path
 
 import arcade
+import arcade.experimental.lights
 import pyglet.display
 from pyglet.math import Vec2
 
@@ -117,6 +118,16 @@ class GameView(model.FadingView):
             walls=self.scene["walls"],
         )
         self.setup_ui()
+        self.light_layer = arcade.experimental.lights.LightLayer(
+            self.window.width,
+            self.window.height,
+        )
+        self.spectre_light = arcade.experimental.lights.Light(
+            self.spectre.center_x, self.spectre.center_y - 50,
+            radius=300,
+            mode="soft",
+        )
+        self.light_layer.add(self.spectre_light)
 
         self.window.background_color = arcade.color.FRESH_AIR
         self.on_resize(self.window.width, self.window.height)
@@ -168,6 +179,8 @@ class GameView(model.FadingView):
 
         self.options_icon.right = width - 20
         self.options_icon.top = height - 20
+
+        self.light_layer.resize(width, height)
 
     def setup_player(self) -> None:
         self.player = model.AnimatedSprite(
@@ -290,12 +303,19 @@ class GameView(model.FadingView):
             if not self.player.change_y > 0:
                 self.player.change_x += SPEED_GAIN_PER_SECOND * delta_time
             self.spectre.change_x += SPEED_GAIN_PER_SECOND_SPECTRE * delta_time
+            self.spectre.change_x = max(
+                self.spectre.change_x, self.player.change_x - 10
+            )
             self.engine.on_update(delta_time)
             self.scene.on_update(
                 delta_time, ["spectre", "obstacles", "ambient"]
             )
             if self.spectre.state == "moving":
                 self.spectre.center_y = self.player.center_y
+                light_pos = (
+                    self.spectre.center_x - 20, self.spectre.center_y - 20
+                )
+                self.spectre_light.position = light_pos
 
         self.scene.update_animation(delta_time)
 
@@ -319,13 +339,22 @@ class GameView(model.FadingView):
 
     def on_draw(self) -> None:
         self.clear()
-        self.ui_camera.use()
-        self.scene.draw(["ambient"], pixelated=True)
-        self.camera.use()
-        self.scene.draw(
-            ["player", "spectre", "obstacles", "walls", "checkpoints"],
-            pixelated=True,
-        )
+
+        with self.light_layer:
+            arcade.draw_rect_filled(
+                arcade.types.LBWH(0, 0, self.window.width, self.window.height),
+                self.window.background_color,
+            )
+            self.ui_camera.use()
+            self.scene.draw(["ambient"], pixelated=True)
+            self.camera.use()
+            self.scene.draw(
+                ["player", "spectre", "obstacles", "walls", "checkpoints"],
+                pixelated=True,
+            )
+        # self.ui_camera.use()
+        self.light_layer.draw(ambient_color=arcade.color.WHITE)
+
         if not self.started:
             self.ui_camera.use()
             self.ui_sprites.draw(pixelated=True)
