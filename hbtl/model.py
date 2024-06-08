@@ -604,3 +604,36 @@ class FadingView(arcade.View):
                 rect,
                 color=(0, 0, 0, int(self._fade_in)),
             )
+
+
+def get_gradient(start_color, end_color, num_colors):
+    """
+    Generate a gradient between two colors as a list of RGB tuples.
+
+    Args:
+        start_color (tuple): The starting color in RGB format
+        (e.g. (0, 0, 255) for blue).
+        end_color (tuple): The ending color in RGB format.
+        num_colors (int): The number of colors in the gradient.
+
+    Returns:
+        list: A list of RGB tuples representing the gradient.
+    """
+    # Unpack the start and end colors
+    start_r, start_g, start_b = start_color
+    end_r, end_g, end_b = end_color
+
+    # Calculate the step size for each color channel
+    r_step = (end_r - start_r) / (num_colors - 1)
+    g_step = (end_g - start_g) / (num_colors - 1)
+    b_step = (end_b - start_b) / (num_colors - 1)
+
+    # Generate the gradient
+    gradient = []
+    for i in range(num_colors):
+        r = int(start_r + i * r_step)
+        g = int(start_g + i * g_step)
+        b = int(start_b + i * b_step)
+        gradient.append((r, g, b))
+
+    return gradient

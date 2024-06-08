@@ -3,10 +3,12 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "grass/init_map.tmx",
+    "activeFile": "",
     "expandedProjectPaths": [
+        "ice",
+        ".",
         "grass",
-        "."
+        "obsidian"
     ],
     "fileStates": {
         "grass.tsx": {
@@ -64,25 +66,91 @@
         },
         "grass/init_map.tmx": {
             "scale": 2,
-            "selectedLayer": 1,
+            "selectedLayer": 0,
             "viewCenter": {
-                "x": 287.75,
-                "y": 234.25
+                "x": 194,
+                "y": 275.25
             }
         },
         "ice.tsx": {
             "dynamicWrapping": false,
-            "scaleInDock": 1,
-            "scaleInEditor": 1
+            "scaleInDock": 4,
+            "scaleInEditor": 8
+        },
+        "ice/ice_1.tmx": {
+            "scale": 3,
+            "selectedLayer": 1,
+            "viewCenter": {
+                "x": 123.83333333333333,
+                "y": 302.5
+            }
+        },
+        "ice/ice_2.tmx": {
+            "scale": 2,
+            "selectedLayer": 1,
+            "viewCenter": {
+                "x": 113.25,
+                "y": 88.25
+            }
+        },
+        "ice/ice_3.tmx": {
+            "scale": 1.5,
+            "selectedLayer": -1,
+            "viewCenter": {
+                "x": 273,
+                "y": 269.66666666666663
+            }
+        },
+        "ice/obsidian_1.tmj": {
+            "scale": 1.8346874999999998,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 232.46465678760012,
+                "y": 240.0953840912962
+            }
         },
         "misc.tsx": {
             "dynamicWrapping": true,
+            "scaleInDock": 2,
+            "scaleInEditor": 1
+        },
+        "obsidian.tsx": {
+            "dynamicWrapping": false,
             "scaleInDock": 3,
+            "scaleInEditor": 5.5
+        },
+        "obsidian/obsidian_1.tmx": {
+            "scale": 2,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 249,
+                "y": 206.25
+            }
+        },
+        "obsidian/obsidian_2.tmx": {
+            "scale": 1.8346874999999998,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 270.8908192812127,
+                "y": 254.26673479816043
+            }
+        },
+        "obsidian/obsidian_3.tmx": {
+            "scale": 1.8346874999999998,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 409.87906659853525,
+                "y": 137.62561744166243
+            }
+        },
+        "obstacles.tsx": {
+            "dynamicWrapping": true,
+            "scaleInDock": 1,
             "scaleInEditor": 1
         }
     },
-    "last.exportedFilePath": "/home/Dominik/code/projects/haunted-by-the-light/hbtl/assets/maps/grass",
-    "last.imagePath": "/home/Dominik/code/projects/haunted-by-the-light/hbtl/assets/textures/spectre",
+    "last.exportedFilePath": "/home/Dominik/code/projects/haunted-by-the-light/hbtl/assets/maps/darkness",
+    "last.imagePath": "/home/Dominik/code/projects/haunted-by-the-light/hbtl/assets/textures/darkness",
     "map.height": 30,
     "map.lastUsedExportFilter": "JSON map files (*.tmj *.json)",
     "map.lastUsedFormat": "tmx",
@@ -90,24 +158,27 @@
     "map.tileWidth": 16,
     "map.width": 30,
     "openFiles": [
-        "grass/init_map.tmx",
-        "ice.tsx",
-        "grass.tsx",
-        "misc.tsx"
     ],
     "project": "hbtl.tiled-project",
     "property.type": "bool",
     "recentFiles": [
-        "grass/grass_2.tmx",
-        "misc.tsx",
-        "grass.tsx",
+        "grass/init_map.tmx",
+        "obsidian/obsidian_1.tmx",
+        "obsidian/obsidian_2.tmx",
+        "obsidian/obsidian_3.tmx",
+        "obsidian.tsx",
+        "ice/obsidian_1.tmj",
         "ice.tsx",
-        "grass/init_map.tmx"
+        "grass.tsx",
+        "misc.tsx",
+        "ice/ice_1.tmx",
+        "ice/ice_2.tmx",
+        "ice/ice_3.tmx"
     ],
     "tileset.lastUsedFormat": "tsx",
     "tileset.tileSize": {
         "height": 16,
         "width": 16
     },
-    "tileset.type": 1
+    "tileset.type": 0
 }
