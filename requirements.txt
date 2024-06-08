@@ -1,3 +1,3 @@
-arcade==3.0.0dev28
+arcade@git+https://github.com/pythonarcade/arcade
 arcade-accelerate
 pyglet
