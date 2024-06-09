@@ -6,7 +6,8 @@ python -m nuitka `
     --include-data-dir=hbtl/assets=assets/ `
     --include-data-files=hbtl/licenses.txt=licenses.txt `
     --windows-icon-from-ico=appicon.ico `
-    --disable-console `
     --show-progress `
     --show-memory `
-    urlaubsliste/__main__.py
+    hbtl/__main__.py
+
+    # --disable-console `
