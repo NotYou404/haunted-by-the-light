@@ -26,9 +26,9 @@ PLAYER_SCALING = 3
 
 INITIAL_SPEED = 300
 INITIAL_SPEED_SPECTRE = 310
-SPEED_GAIN_PER_SECOND = 4
-SPEED_GAIN_PER_SECOND_SPECTRE = 2
-SPEED_PENALTY_VERTICAL_PLUS = -0.05
+SPEED_GAIN_PER_SECOND = 3.5
+SPEED_GAIN_PER_SECOND_SPECTRE = 1.7
+SPEED_PENALTY_VERTICAL_PLUS = -0.04
 SPECTRE_SPEED_CAP = 5
 GRAVITY = 1
 JUMP_VELOCITY = 23
@@ -38,6 +38,12 @@ BACKGROUND_GRADIENT_STEPS = 30
 
 # Dripstones above this height will fall down eventually
 ICE_DRIPSTONE_FALL_HEIGHT = 1050
+
+
+sound_horizon = arcade.load_sound(MUSIC_PATH.get("Horizon"))
+sound_sewer = arcade.load_sound(MUSIC_PATH.get("mysterious_sewer_main"))
+sound_overworld = arcade.load_sound(MUSIC_PATH.get("cut_overworld"))
+sound_dungeon = arcade.load_sound(MUSIC_PATH.get("dungeon002"))
 
 
 class Window(arcade.Window):
@@ -144,9 +150,11 @@ class CreditsView(arcade.View):
             "Haunted by the Light": (48, 80),
             "by TheCheese": (24, 600),
             "Credits": (36, 100),
-            "Music (Grass) - 'Example' by Someone 1": (24, 60),
-            "Music (Ice) - 'Example' by Someone 2": (24, 60),
-            "Music (Obsidian) -  'Example' by Someone 2": (24, 400),
+            "Music (Menu) - 'Mysterious Sewer' by smark (CC0)": (24, 60),
+            "Music (Grass) - 'Overworld/Menu' by Umplix (CC0)": (24, 60),
+            "Music (Ice) - 'Horizon' by HitCtrl (CC-BY 3.0)": (24, 40),
+            "(https://creativecommons.org/licenses/by/3.0/)": (12, 60),
+            "Music (Obsidian) -  'Dungeon Ambience' by yd (CC0)": (24, 400),
             "And a special Thanks to:": (36, 100),
             "The Python Arcade Library": (24, 60),
         }
@@ -232,9 +240,19 @@ class GameView(model.FadingView):
         self.setup_background_gradient_switch()
         self.paused = False
 
+        self.active_sound = None
+        self.active_player = None
+        self.sound_horizon = sound_horizon
+        self.sound_sewer = sound_sewer
+        self.sound_overworld = sound_overworld
+        self.sound_dungeon = sound_dungeon
+
         self.window.background_color = arcade.color.FRESH_AIR
         self.on_resize(self.window.width, self.window.height)
         self.start_fade_in()
+
+    def on_show_view(self) -> None:
+        self.active_player = arcade.play_sound(self.sound_sewer)
 
     def setup_background_gradient_switch(self) -> None:
         self.background_gradient_to_ice = model.get_gradient(
@@ -275,6 +293,10 @@ class GameView(model.FadingView):
             self.prepared_obs_stars.append(star)
 
     def start_background_gradient_to_ice(self) -> None:
+        arcade.stop_sound(self.active_player)
+        self.active_player.delete()
+        self.active_player = arcade.play_sound(self.sound_horizon)
+
         def change_color(dt: float) -> None:
             if not self.background_gradient_to_ice:
                 arcade.unschedule(change_color)
@@ -287,6 +309,10 @@ class GameView(model.FadingView):
         self.scene["ambient"].clear()
 
     def start_background_gradient_to_obs(self) -> None:
+        arcade.stop_sound(self.active_player)
+        self.active_player.delete()
+        self.active_player = arcade.play_sound(self.sound_dungeon)
+
         def change_color(dt: float) -> None:
             if not self.background_gradient_to_obs:
                 arcade.unschedule(change_color)
@@ -345,6 +371,9 @@ class GameView(model.FadingView):
         def start_movement_slime(dt: float) -> None:
             self.player.state = "moving"
             self.player.change_x = INITIAL_SPEED
+            self.active_player = arcade.play_sound(
+                self.sound_overworld, volume=0.6
+            )
 
         def start_movement_spectre(dt: float) -> None:
             self.spectre.state = "moving"
@@ -352,6 +381,8 @@ class GameView(model.FadingView):
 
         self.started = True
         self.spectre.state = "awake"
+        arcade.stop_sound(self.active_player)
+        self.active_player.delete()
         arcade.schedule_once(lambda _: self.engine.jump(JUMP_VELOCITY), 0.8)
         arcade.schedule_once(start_movement_spectre, 1.4)
         arcade.schedule_once(start_movement_slime, 2.0)
@@ -359,8 +390,6 @@ class GameView(model.FadingView):
         arcade.schedule(self.place_cloud, 20.0)
         arcade.schedule(self.place_butterfly, 10.0)
         self.place_cloud(0)
-
-        self.player.center_x = 30000
 
     def on_resize(self, width: int, height: int):
         self.title.center_x = width / 2
@@ -472,8 +501,10 @@ class GameView(model.FadingView):
         self.scene.add_sprite_list("obsidian_obstacles", use_spatial_hash=True)
         self.scene.add_sprite_list("ambient")
 
+        grass_maps = list(range(1, 11))
+        random.shuffle(grass_maps)
         for i in range(1, MAPS_PER_BIOME + 1):
-            map_num = random.randint(1, 6)
+            map_num = grass_maps.pop()
             map = arcade.tilemap.load_tilemap(
                 map_file=MAPS_PATH.get(f"grass_{map_num}.tmj"),
                 scaling=TILE_SCALING,
@@ -486,8 +517,13 @@ class GameView(model.FadingView):
             self.scene["walls"].extend(scene["walls"])
             self.maps.append(map)
 
+        ice_maps = list(range(1, 9))
+        # Ice only has 8 maps, so we need 2 twice
+        ice_maps.append(random.randint(1, 8))
+        ice_maps.append(random.randint(1, 8))
+        random.shuffle(ice_maps)
         for i in range(1, MAPS_PER_BIOME + 1):
-            map_num = random.randint(1, 3)
+            map_num = ice_maps.pop()
             map = arcade.tilemap.load_tilemap(
                 map_file=MAPS_PATH.get(f"ice_{map_num}.tmj"),
                 scaling=TILE_SCALING,
@@ -504,8 +540,13 @@ class GameView(model.FadingView):
             self.scene["obstacles"].extend(scene["obstacles"])
             self.maps.append(map)
 
+        obs_maps = list(range(1, 9))
+        # Obsidian only has 8 maps, so we need 2 twice
+        obs_maps.append(random.randint(1, 8))
+        obs_maps.append(random.randint(1, 8))
+        random.shuffle(obs_maps)
         for i in range(1, MAPS_PER_BIOME + 1):
-            map_num = random.randint(1, 3)
+            map_num = obs_maps.pop()
             map = arcade.tilemap.load_tilemap(
                 map_file=MAPS_PATH.get(f"obsidian_{map_num}.tmj"),
                 scaling=TILE_SCALING,
@@ -716,6 +757,17 @@ class GameView(model.FadingView):
                 except (IndexError, ValueError):
                     pass
 
+            if not self.ended and self.player.center_y <= -200:
+                self.try_res()
+            elif not self.ended and self.spectre.right - 30 > self.player.left:
+                self.try_res()
+            elif arcade.check_for_collision_with_lists(
+                self.player, [
+                    self.scene["obstacles"], self.scene["obsidian_obstacles"]
+                ],
+            ):
+                self.try_res()
+
         self.scene.update_animation(delta_time)
 
         self.camera.match_screen()
@@ -724,28 +776,17 @@ class GameView(model.FadingView):
             self.player.center_y + self.window.height / 8,
         )
 
-        if not self.ended and self.player.center_y <= -200:
-            self.try_res()
-        elif not self.ended and self.spectre.right - 30 > self.player.left:
-            self.try_res()
-        elif arcade.check_for_collision_with_lists(
-            self.player, [
-                self.scene["obstacles"], self.scene["obsidian_obstacles"]
-            ],
-        ):
-            self.try_res()
-
     def try_res(self) -> None:
         right_most_checkpoint = None
         for checkpoint in self.scene["checkpoints"]:
             checkpoint: model.Sprite
             if checkpoint.properties.get("active"):
                 if (
-                    not right_most_checkpoint
+                    right_most_checkpoint is None
                     or checkpoint.center_x > right_most_checkpoint.center_x
                 ):
                     right_most_checkpoint = checkpoint
-        if not right_most_checkpoint:
+        if right_most_checkpoint is None:
             self.end()
             return
 
@@ -777,6 +818,9 @@ class GameView(model.FadingView):
             self.spectre.center_y = self.player.center_y
             self.spectre_light.position = self.spectre.center
             self.spectre.change_x = self.player.change_x + 2
+            for obstacle in self.scene["obstacles"]:
+                if obstacle.change_y < 0:
+                    obstacle.remove_from_sprite_lists()
 
         arcade.schedule_once(set_to_checkpoint, 1.0)
 
@@ -787,6 +831,9 @@ class GameView(model.FadingView):
         arcade.schedule_once(start_from_checkpoint, 5.0)
 
     def end(self, state: str = "dead") -> None:
+        arcade.stop_sound(self.active_player)
+        self.active_player.delete()
+
         self.ended = True
         self.player.state = state
         self.player.update_animation(0)
