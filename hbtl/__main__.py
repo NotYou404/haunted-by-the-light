@@ -48,7 +48,7 @@ def main() -> None:
         height=height,
     )
     win.set_min_size(1200, 800)
-    intro_view = GameView()  # TODO IntroView1()
+    intro_view = IntroView1()
     intro_view.setup()
     win.show_view(intro_view)
     arcade.run()
