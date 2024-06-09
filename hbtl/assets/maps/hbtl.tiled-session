@@ -3,14 +3,26 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "",
+    "activeFile": "darkness/darkness.tmx",
     "expandedProjectPaths": [
+        "obsidian",
         "ice",
         ".",
-        "grass",
-        "obsidian"
+        "grass"
     ],
     "fileStates": {
+        "darkness.tsx": {
+            "scaleInDock": 4,
+            "scaleInEditor": 23
+        },
+        "darkness/darkness.tmx": {
+            "scale": 1,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 335,
+                "y": 497.5
+            }
+        },
         "grass.tsx": {
             "dynamicWrapping": false,
             "scaleInDock": 1,
@@ -158,22 +170,27 @@
     "map.tileWidth": 16,
     "map.width": 30,
     "openFiles": [
+        "obsidian/obsidian_1.tmx",
+        "obsidian/obsidian_2.tmx",
+        "obsidian/obsidian_3.tmx",
+        "darkness.tsx",
+        "darkness/darkness.tmx"
     ],
     "project": "hbtl.tiled-project",
     "property.type": "bool",
     "recentFiles": [
-        "grass/init_map.tmx",
         "obsidian/obsidian_1.tmx",
         "obsidian/obsidian_2.tmx",
         "obsidian/obsidian_3.tmx",
+        "darkness.tsx",
+        "darkness/darkness.tmx",
+        "grass/init_map.tmx",
         "obsidian.tsx",
         "ice/obsidian_1.tmj",
         "ice.tsx",
         "grass.tsx",
         "misc.tsx",
-        "ice/ice_1.tmx",
-        "ice/ice_2.tmx",
-        "ice/ice_3.tmx"
+        "ice/ice_1.tmx"
     ],
     "tileset.lastUsedFormat": "tsx",
     "tileset.tileSize": {

@@ -1,2 +1,1 @@
-arcade@git+https://github.com/pythonarcade/arcade@9afc46a  # TODO test
-pyglet
+arcade@git+https://github.com/pythonarcade/arcade@9afc46a

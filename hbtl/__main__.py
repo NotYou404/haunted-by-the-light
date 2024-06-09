@@ -139,9 +139,19 @@ class CreditsView(arcade.View):
             "Music (Grass) - 'Example' by Someone 1": (24, 60),
             "Music (Ice) - 'Example' by Someone 2": (24, 60),
             "Music (Obsidian) -  'Example' by Someone 2": (24, 400),
-            "Open Source Software": (36, 100),
-            "...": (24, 60),
+            "And a special Thanks to:": (36, 100),
+            "The Python Arcade Library": (24, 60),
         }
+
+        # TODO
+        # This ^
+        # More maps
+        # Fix impossible maps
+        # Make obsidian maps easier
+        # Checkpoints
+        # Get music and sound effects
+        # Test commit in requirements.txt (test on older comment not working)
+        # Polish (not Duolingo)
 
         cur_y = -50
         for text, (size, space) in text_dict.items():
