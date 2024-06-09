@@ -42,6 +42,7 @@ def main() -> None:
     width = screen.width
     height = screen.height
     win = arcade.Window(
+        title="Haunted by the Light",
         resizable=True,
         vsync=True,
         width=width,
