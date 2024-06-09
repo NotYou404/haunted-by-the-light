@@ -554,6 +554,14 @@ class FadingView(arcade.View):
         """
         self._fade_out = 0.0
 
+    def stop_fade_out(self) -> None:
+        """
+        Stop fading out. Useful when fading does not happen on transition but
+        during the view is active. This will remove the fading, so you can fade
+        back in again.
+        """
+        self._fade_out = None
+
     def on_update(self, delta_time: float) -> None:
         """Overridden to call the update_fade() method."""
         super().on_update(delta_time)

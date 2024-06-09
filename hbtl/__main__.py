@@ -144,7 +144,6 @@ class CreditsView(arcade.View):
         }
 
         # TODO
-        # This ^
         # More maps
         # Fix impossible maps
         # Make obsidian maps easier
@@ -372,6 +371,10 @@ class GameView(model.FadingView):
 
         self.light_layer.resize(width, height)
 
+        for i, heart in enumerate(self.hearts):
+            heart.top = height - 30
+            heart.left = (i + 1) * 14 + i * heart.width + 16
+
         self.camera.match_screen()
         self.ui_camera.match_screen(False)
 
@@ -523,6 +526,26 @@ class GameView(model.FadingView):
         self.scene["ambient"].extend(dark_scene["ambient"])
         self.maps.append(map)
 
+        # Add checkpoints
+        for wall in self.scene["walls"]:
+            wall: model.Sprite
+            if wall.properties.get("checkable"):
+                if wall.center_x <= MAP_WIDTH * TILE_SCALING * TILE_SIZE:
+                    continue  # Not on init map
+                if random.random() < 0.02:
+                    checkpoint = model.Sprite(
+                        path_or_texture=TEXTURES_PATH.get("checkpoint"),
+                        scale=TILE_SCALING,
+                        center_x=wall.center_x,
+                        center_y=wall.center_y + TILE_SIZE * TILE_SCALING,
+                    )
+                    if not arcade.check_for_collision_with_lists(
+                        checkpoint,
+                        [self.scene["obstacles"],
+                         self.scene["obsidian_obstacles"]],
+                    ):
+                        self.scene["checkpoints"].append(checkpoint)
+
         # XXX
         # # Setup ice ambient
         # ice_biome_start = (
@@ -580,6 +603,13 @@ class GameView(model.FadingView):
         )
         self.ui_sprites.append(self.show_credits)
 
+        self.hearts = arcade.SpriteList()
+        for _ in range(3):
+            self.hearts.append(model.Sprite(
+                path_or_texture=TEXTURES_PATH.get("heart"),
+                scale=4,)
+            )
+
     def on_update(self, delta_time: float) -> None:
         super().on_update(delta_time)
 
@@ -609,6 +639,19 @@ class GameView(model.FadingView):
                     if dripstone.center_y > ICE_DRIPSTONE_FALL_HEIGHT:
                         if self.player.right + 140 > dripstone.left:
                             dripstone.change_y = -1000
+
+            for checkpoint in self.scene["checkpoints"]:
+                checkpoint: model.Sprite
+                if not checkpoint.properties.get("active"):
+                    if (
+                        checkpoint.bottom < self.player.top
+                        and checkpoint.left <= self.player.center_x
+                        <= checkpoint.right
+                    ):
+                        checkpoint.properties["active"] = True
+                        checkpoint.texture = arcade.load_texture(
+                            file_path=TEXTURES_PATH.get("checkpoint_active"),
+                        )
 
             if len(
                 self.background_gradient_to_ice
@@ -645,9 +688,59 @@ class GameView(model.FadingView):
         )
 
         if not self.ended and self.player.center_y <= -200:
+            self.try_res()
+        elif not self.ended and self.spectre.right - 30 > self.player.left:
+            self.try_res()
+
+    def try_res(self) -> None:
+        right_most_checkpoint = None
+        for checkpoint in self.scene["checkpoints"]:
+            checkpoint: model.Sprite
+            if checkpoint.properties.get("active"):
+                if (
+                    not right_most_checkpoint
+                    or checkpoint.center_x > right_most_checkpoint.center_x
+                ):
+                    right_most_checkpoint = checkpoint
+        if not right_most_checkpoint:
             self.end()
-        elif self.spectre.right - 30 > self.player.left:
+            return
+
+        try:
+            self.hearts.pop()
+        except (IndexError, ValueError):  # BUG SpriteList raises ValueError for some reason  # noqa
             self.end()
+            return
+
+        self.ended = True
+
+        self.fade_rate = 200
+        self.start_fade_out()
+
+        def fade_back_in(dt: float) -> None:
+            self.fade_rate = 100
+            self.stop_fade_out()
+            self.start_fade_in()
+
+        arcade.schedule_once(fade_back_in, 1.0)
+        arcade.schedule_once(lambda _: setattr(self, "fade_rate", 200), 1.5)
+
+        def set_to_checkpoint(dt: float) -> None:
+            self.player.state = "idling"
+            self.player.update_animation(0)
+            self.player.center_x = right_most_checkpoint.center_x
+            self.player.bottom = right_most_checkpoint.bottom
+            self.spectre.center_x = self.player.center_x - 300
+            self.spectre.center_y = self.player.center_y
+            self.spectre_light.position = self.spectre.center
+
+        arcade.schedule_once(set_to_checkpoint, 1.0)
+
+        def start_from_checkpoint(dt: float) -> None:
+            self.ended = False
+            self.player.state = "moving"
+
+        arcade.schedule_once(start_from_checkpoint, 5.0)
 
     def end(self, state: str = "dead") -> None:
         self.ended = True
@@ -670,8 +763,8 @@ class GameView(model.FadingView):
             self.camera.use()
             # XXX self.ice_ambients.draw(pixelated=True)
             self.scene.draw(
-                ["player", "spectre", "obstacles", "obsidian_obstacles",
-                 "walls", "checkpoints"],
+                ["walls", "obstacles", "obsidian_obstacles",
+                 "checkpoints", "spectre", "player"],
                 pixelated=True,
             )
 
@@ -681,6 +774,7 @@ class GameView(model.FadingView):
             self.ui_camera.use()
             self.ui_sprites.draw(pixelated=True)
         self.ui_camera.use()
+        self.hearts.draw(pixelated=True)
         self.draw_fading()
 
     @property
