@@ -24,6 +24,8 @@ INITIAL_SPEED = 300
 INITIAL_SPEED_SPECTRE = 310
 SPEED_GAIN_PER_SECOND = 4
 SPEED_GAIN_PER_SECOND_SPECTRE = 2
+SPEED_PENALTY_VERTICAL_PLUS = -0.05
+SPECTRE_SPEED_CAP = 5
 GRAVITY = 1
 JUMP_VELOCITY = 23
 
@@ -144,13 +146,9 @@ class CreditsView(arcade.View):
         }
 
         # TODO
-        # More maps
-        # Fix impossible maps
-        # Make obsidian maps easier
-        # Checkpoints
-        # Get music and sound effects
-        # Test commit in requirements.txt (test on older comment not working)
-        # Polish (not Duolingo)
+        # More maps ...
+        # Get music and sound effects ...
+        # Polish (not Duolingo) ...
 
         cur_y = -50
         for text, (size, space) in text_dict.items():
@@ -232,6 +230,7 @@ class GameView(model.FadingView):
         )
         self.light_layer.add(self.spectre_light)
         self.setup_background_gradient_switch()
+        self.paused = False
 
         self.window.background_color = arcade.color.FRESH_AIR
         self.on_resize(self.window.width, self.window.height)
@@ -368,6 +367,14 @@ class GameView(model.FadingView):
 
         self.show_credits.right = width - 20
         self.show_credits.top = height - 20
+
+        self.quit_game.left = 20
+        self.quit_game.bottom = 20
+
+        self.pause_continue.center_x = width / 2
+        self.pause_continue.center_y = height / 2 + 40
+        self.pause_quit.center_x = width / 2
+        self.pause_quit.top = self.pause_continue.bottom - 40
 
         self.light_layer.resize(width, height)
 
@@ -603,6 +610,12 @@ class GameView(model.FadingView):
         )
         self.ui_sprites.append(self.show_credits)
 
+        self.quit_game = model.Sprite(
+            path_or_texture=TEXTURES_PATH.get("quit_game"),
+            scale=3,
+        )
+        self.ui_sprites.append(self.quit_game)
+
         self.hearts = arcade.SpriteList()
         for _ in range(3):
             self.hearts.append(model.Sprite(
@@ -610,16 +623,35 @@ class GameView(model.FadingView):
                 scale=4,)
             )
 
+        self.pause_sprites = arcade.SpriteList()
+        self.pause_continue = model.Sprite(
+            path_or_texture=TEXTURES_PATH.get("continue"),
+            scale=3,
+        )
+        self.pause_quit = model.Sprite(
+            path_or_texture=TEXTURES_PATH.get("quit"),
+            scale=3,
+        )
+        self.pause_sprites.extend([self.pause_continue, self.pause_quit])
+
     def on_update(self, delta_time: float) -> None:
         super().on_update(delta_time)
 
-        if self.started and not self.ended:
-            if not self.player.change_y > 0:
+        if self.started and not self.ended and not self.paused:
+            if not self.player.change_y > 0 and self.player.state == "moving":
+                # Only gain if not jumping or going up
                 self.player.change_x += SPEED_GAIN_PER_SECOND * delta_time
+            elif self.player.center_x > MAP_WIDTH * TILE_SIZE * TILE_SCALING:
+                # Even reduce speed to spice things up (not on init_map)
+                self.player.change_x += SPEED_PENALTY_VERTICAL_PLUS
             self.spectre.change_x += SPEED_GAIN_PER_SECOND_SPECTRE * delta_time
             self.spectre.change_x = max(
                 self.spectre.change_x, self.player.change_x - 10
             )
+            self.spectre.change_x = max(
+                self.spectre.change_x, self.player.change_x - SPECTRE_SPEED_CAP
+            )
+            print(self.player.change_x, self.spectre.change_x)
             self.engine.on_update(delta_time)
             self.scene.on_update(
                 delta_time, ["ambient", "spectre", "obstacles"]
@@ -775,6 +807,14 @@ class GameView(model.FadingView):
             self.ui_sprites.draw(pixelated=True)
         self.ui_camera.use()
         self.hearts.draw(pixelated=True)
+
+        if self.paused:
+            arcade.draw_rect_filled(
+                arcade.types.LBWH(0, 0, self.window.width, self.window.height),
+                arcade.types.Color(0, 0, 0, 100),
+            )
+            self.pause_sprites.draw(pixelated=True)
+
         self.draw_fading()
 
     @property
@@ -785,6 +825,8 @@ class GameView(model.FadingView):
         if self.started:
             if symbol == arcade.key.SPACE and self.engine.can_jump():
                 self.engine.jump(JUMP_VELOCITY)
+            elif symbol == arcade.key.ESCAPE:
+                self.paused = not self.paused
             elif symbol == arcade.key.RIGHT:
                 self.player.center_x += 1000  # XXX
         else:
@@ -801,7 +843,14 @@ class GameView(model.FadingView):
 
     def on_mouse_press(self, x: int, y: int, button: int, modifiers: int):
         if self.started:
-            if button == arcade.MOUSE_BUTTON_LEFT and self.engine.can_jump():
+            if self.paused:
+                if button == arcade.MOUSE_BUTTON_LEFT:
+                    if self.pause_continue.rect.point_in_rect((x, y)):
+                        self.paused = False
+                    elif self.pause_quit.rect.point_in_rect((x, y)):
+                        self.paused = False
+                        self.end()
+            elif button == arcade.MOUSE_BUTTON_LEFT and self.engine.can_jump():
                 self.engine.jump(JUMP_VELOCITY)
         else:
             if button == arcade.MOUSE_BUTTON_LEFT:
@@ -809,6 +858,8 @@ class GameView(model.FadingView):
                     self.next_view = CreditsView
                     self.fade_rate = 500
                     self.start_fade_out()
+                elif self.quit_game.rect.point_in_rect((x, y)):
+                    self.window.close()
                 else:
                     self.start()
 

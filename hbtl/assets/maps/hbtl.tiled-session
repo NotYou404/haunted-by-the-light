@@ -32,15 +32,15 @@
             "scale": 3,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": 150.5,
-                "y": 224.83333333333331
+                "x": 308,
+                "y": 326.16666666666663
             }
         },
         "grass/grass_2.tmx": {
             "scale": 0.75,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": 392.66666666666663,
+                "x": 393.33333333333326,
                 "y": 321.99999999999994
             }
         },
@@ -48,7 +48,7 @@
             "scale": 1.5,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": 212.33333333333331,
+                "x": 212.66666666666663,
                 "y": 246.99999999999997
             }
         },
@@ -56,24 +56,24 @@
             "scale": 1.5,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": 314.3333333333333,
+                "x": 314.66666666666663,
                 "y": 300.99999999999994
             }
         },
         "grass/grass_5.tmx": {
-            "scale": 1.8346874999999998,
+            "scale": 1.5,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": 232.46465678760012,
-                "y": 240.0953840912962
+                "x": 276,
+                "y": 326.33333333333337
             }
         },
         "grass/grass_6.tmx": {
             "scale": 1.5,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": 216.33333333333331,
-                "y": 302.99999999999994
+                "x": 299.99999999999994,
+                "y": 225.66666666666663
             }
         },
         "grass/init_map.tmx": {
@@ -90,27 +90,27 @@
             "scaleInEditor": 8
         },
         "ice/ice_1.tmx": {
-            "scale": 3,
-            "selectedLayer": 1,
+            "scale": 2,
+            "selectedLayer": 0,
             "viewCenter": {
-                "x": 123.83333333333333,
-                "y": 302.5
+                "x": 402,
+                "y": 269.75
             }
         },
         "ice/ice_2.tmx": {
-            "scale": 2,
+            "scale": 0.75,
             "selectedLayer": 1,
             "viewCenter": {
-                "x": 113.25,
-                "y": 88.25
+                "x": 65.33333333333326,
+                "y": 83.33333333333326
             }
         },
         "ice/ice_3.tmx": {
-            "scale": 1.5,
-            "selectedLayer": -1,
+            "scale": 3,
+            "selectedLayer": 1,
             "viewCenter": {
-                "x": 273,
-                "y": 269.66666666666663
+                "x": 212.66666666666669,
+                "y": 209.49999999999997
             }
         },
         "ice/obsidian_1.tmj": {
@@ -132,27 +132,27 @@
             "scaleInEditor": 5.5
         },
         "obsidian/obsidian_1.tmx": {
-            "scale": 2,
-            "selectedLayer": 0,
+            "scale": 4,
+            "selectedLayer": 1,
             "viewCenter": {
-                "x": 240,
-                "y": 239.75
+                "x": 383.25,
+                "y": 210.125
             }
         },
         "obsidian/obsidian_2.tmx": {
-            "scale": 1.8346874999999998,
+            "scale": 1.5,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": 240.36791006642818,
-                "y": 240.0953840912962
+                "x": 353.33333333333337,
+                "y": 240.33333333333337
             }
         },
         "obsidian/obsidian_3.tmx": {
             "scale": 1.8346874999999998,
-            "selectedLayer": 0,
+            "selectedLayer": 1,
             "viewCenter": {
-                "x": 240.36791006642818,
-                "y": 240.0953840912962
+                "x": 330.30148185998985,
+                "y": 198.12638392096744
             }
         },
         "obstacles.tsx": {
@@ -161,7 +161,7 @@
             "scaleInEditor": 1
         }
     },
-    "last.exportedFilePath": "/home/Dominik/code/projects/haunted-by-the-light/hbtl/assets/maps/darkness",
+    "last.exportedFilePath": "/home/Dominik/code/projects/haunted-by-the-light/hbtl/assets/maps/obsidian",
     "last.imagePath": "/home/Dominik/code/projects/haunted-by-the-light/hbtl/assets/textures/misc",
     "map.height": 30,
     "map.lastUsedExportFilter": "JSON map files (*.tmj *.json)",
@@ -179,9 +179,9 @@
     "project": "hbtl.tiled-project",
     "property.type": "bool",
     "recentFiles": [
-        "obsidian/obsidian_1.tmx",
         "obsidian/obsidian_2.tmx",
         "obsidian/obsidian_3.tmx",
+        "obsidian/obsidian_1.tmx",
         "darkness.tsx",
         "darkness/darkness.tmx",
         "grass/init_map.tmx",
