@@ -651,7 +651,6 @@ class GameView(model.FadingView):
             self.spectre.change_x = max(
                 self.spectre.change_x, self.player.change_x - SPECTRE_SPEED_CAP
             )
-            print(self.player.change_x, self.spectre.change_x)
             self.engine.on_update(delta_time)
             self.scene.on_update(
                 delta_time, ["ambient", "spectre", "obstacles"]
