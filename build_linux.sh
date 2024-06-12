@@ -9,7 +9,7 @@ python -m nuitka \
     --noinclude-data-files=*.tiled-project \
     --noinclude-data-files=*.tiled-session \
     --noinclude-data-files=*.tmx \
-    --noinclude-data-files=_unused* \
+    --noinclude-data-files=*.unused \
     --windows-icon-from-ico=appicon.ico \
     --windows-console-mode=disable \
     --show-progress \
