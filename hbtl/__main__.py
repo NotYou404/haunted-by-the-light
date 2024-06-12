@@ -32,6 +32,7 @@ SPEED_PENALTY_VERTICAL_PLUS = -0.04
 SPECTRE_SPEED_CAP = 5
 GRAVITY = 1
 JUMP_VELOCITY = 23
+CAMERA_SPEED = 0.3
 
 MAPS_PER_BIOME = 10
 BACKGROUND_GRADIENT_STEPS = 30
@@ -152,7 +153,7 @@ class CreditsView(arcade.View):
             "Credits": (36, 100),
             "Music (Menu) - 'Mysterious Sewer' by smark (CC0)": (24, 60),
             "Music (Grass) - 'Overworld/Menu' by Umplix (CC0)": (24, 60),
-            "Music (Ice) - 'Horizon' by HitCtrl (CC-BY 3.0)": (24, 40),
+            "Music (Ice) - 'Horizon' by HitCtrl (CC-BY 3.0) [Modified: Reduced Quality]": (24, 40),  # noqa
             "(https://creativecommons.org/licenses/by/3.0/)": (12, 60),
             "Music (Obsidian) -  'Dungeon Ambience' by yd (CC0)": (24, 400),
             "And a special Thanks to:": (36, 100),
@@ -214,11 +215,11 @@ class GameView(model.FadingView):
         self.ended = False
 
         self.shapes = pyglet.shapes.Batch()
+        self.camera = arcade.camera.Camera2D()
+        self.ui_camera = arcade.camera.Camera2D()
         self.setup_map()
         self.setup_player()
         self.setup_spectre()
-        self.camera = arcade.camera.Camera2D()
-        self.ui_camera = arcade.camera.Camera2D()
         self.engine = model.CustomPhysicsEnginePlatformer(
             player_sprite=self.player,
             gravity_constant=GRAVITY,
@@ -454,6 +455,10 @@ class GameView(model.FadingView):
         )
         self.scene["spawn"].visible = False
         self.scene.add_sprite("player", self.player)
+        self.camera.position = (
+            self.player.center_x,
+            self.player.center_y + self.window.height / 8,
+        )
 
     def setup_spectre(self) -> None:
         self.spectre = model.AnimatedSprite(scale=4)
@@ -771,9 +776,13 @@ class GameView(model.FadingView):
         self.scene.update_animation(delta_time)
 
         self.camera.match_screen()
-        self.camera.position = (
-            self.player.center_x,
-            self.player.center_y + self.window.height / 8,
+        self.camera.position = arcade.math.lerp_2d(
+            self.camera.position,
+            (
+                self.player.center_x,
+                self.player.center_y + self.window.height / 8,
+            ),
+            CAMERA_SPEED,
         )
 
     def try_res(self) -> None:
