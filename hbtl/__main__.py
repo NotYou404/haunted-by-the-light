@@ -920,6 +920,8 @@ class GameView(model.FadingView):
         else:
             if button == arcade.MOUSE_BUTTON_LEFT:
                 if self.show_credits.rect.point_in_rect((x, y)):
+                    arcade.stop_sound(self.active_player)
+                    self.active_player.delete()
                     self.next_view = CreditsView
                     self.fade_rate = 500
                     self.start_fade_out()
