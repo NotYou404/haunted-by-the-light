@@ -38,11 +38,13 @@ class AssetsPath(type(Path())):  # type: ignore
     """
     def __new__(cls, *pathsegments: str | Path) -> "AssetsPath":
         obj: AssetsPath = super().__new__(cls, *pathsegments)
-        obj.get = obj.find_asset
         return obj
 
     # Avoiding using an __init__ because it doesn't work really well with the
     # pathlib Path system
+
+    def get(self, *args, **kwargs) -> Path:
+        return self.find_asset(*args, **kwargs)
 
     def find_asset(
         self,
