@@ -1,0 +1,16 @@
+[build-system]
+requires = ["setuptools", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "haunted-by-the-light"
+version = "1.2.1"
+authors = [{ name = "Dominik Reinartz", email = "dominik.reinartz@proton.me" }]
+description = "A side-scrolling Platformer where you have to escape the Light, made for Mini-Jam #160."
+readme = "README.md"
+requires-python = ">=3.9"
+keywords = ["game", "platformer", "side-scroller", "mini-jam"]
+license = { text = "MIT" }
+
+[project.scripts]
+hbtl = "hbtl.__main__:main"
