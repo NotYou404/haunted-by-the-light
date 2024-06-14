@@ -71,7 +71,7 @@ class AssetsPath(type(Path())):  # type: ignore
 
             if "." not in asset:
                 # .find_asset("filename") without ext should also be allowed
-                return self.find_asset(fr"{asset}.*")
+                return self.find_asset(f"{asset}.*")
 
             raise FileNotFoundError(
                 f"Could not find an asset with glob `{asset}`"
