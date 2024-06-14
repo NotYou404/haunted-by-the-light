@@ -11,6 +11,7 @@ readme = "README.md"
 requires-python = ">=3.9"
 keywords = ["game", "platformer", "side-scroller", "mini-jam"]
 license = { text = "MIT" }
+dependencies = ["arcade@git+https://github.com/pythonarcade/arcade@9afc46a"]
 
 [project.scripts]
 hbtl = "hbtl.__main__:main"
