@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "haunted-by-the-light"
-version = "1.2.5"
+version = "1.2.6"
 authors = [{ name = "Dominik Reinartz", email = "dominik.reinartz@proton.me" }]
 description = "A side-scrolling Platformer where you have to escape the Light, made for Mini-Jam #160."
 readme = "README.md"

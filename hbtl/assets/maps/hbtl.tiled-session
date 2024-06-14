@@ -211,66 +211,66 @@
         },
         "obsidian/obsidian_1.tmx": {
             "scale": 1.5,
-            "selectedLayer": 1,
+            "selectedLayer": 0,
             "viewCenter": {
-                "x": 356.3333333333333,
-                "y": 150.66666666666663
+                "x": 297.33333333333337,
+                "y": 150.99999999999997
             }
         },
         "obsidian/obsidian_2.tmx": {
             "scale": 2,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": 360.25,
-                "y": 251.5
+                "x": 341,
+                "y": 254.25
             }
         },
         "obsidian/obsidian_3.tmx": {
             "scale": 1.8346874999999998,
-            "selectedLayer": 1,
+            "selectedLayer": 0,
             "viewCenter": {
-                "x": 297.8708908192812,
-                "y": 240.3679100664282
+                "x": 120.45648100834609,
+                "y": 240.64043604156018
             }
         },
         "obsidian/obsidian_4.tmx": {
             "scale": 1.78125,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": 259.6491228070176,
-                "y": 304.84210526315786
+                "x": 259.9298245614035,
+                "y": 304.56140350877195
             }
         },
         "obsidian/obsidian_5.tmx": {
             "scale": 1.5,
-            "selectedLayer": 1,
+            "selectedLayer": 0,
             "viewCenter": {
-                "x": 263,
-                "y": 293.99999999999994
+                "x": 263.33333333333337,
+                "y": 294.33333333333337
             }
         },
         "obsidian/obsidian_6.tmx": {
             "scale": 1.5,
-            "selectedLayer": 1,
+            "selectedLayer": 0,
             "viewCenter": {
-                "x": 277.66666666666663,
-                "y": 279.33333333333337
+                "x": 278,
+                "y": 279.66666666666663
             }
         },
         "obsidian/obsidian_7.tmx": {
             "scale": 1.5,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": 238.33333333333331,
-                "y": 347.99999999999994
+                "x": 238.66666666666663,
+                "y": 347.66666666666663
             }
         },
         "obsidian/obsidian_8.tmx": {
             "scale": 1.5,
-            "selectedLayer": 1,
+            "selectedLayer": 0,
             "viewCenter": {
-                "x": 250.33333333333331,
-                "y": 325.33333333333337
+                "x": 250.66666666666663,
+                "y": 324.99999999999994
             }
         },
         "obstacles.tsx": {
@@ -292,10 +292,10 @@
     "project": "hbtl.tiled-project",
     "property.type": "bool",
     "recentFiles": [
-        "obsidian/obsidian_5.tmx",
-        "obsidian/obsidian_6.tmx",
-        "obsidian/obsidian_7.tmx",
         "obsidian/obsidian_8.tmx",
+        "obsidian/obsidian_7.tmx",
+        "obsidian/obsidian_6.tmx",
+        "obsidian/obsidian_5.tmx",
         "obsidian/obsidian_4.tmx",
         "obsidian/obsidian_3.tmx",
         "obsidian/obsidian_2.tmx",
