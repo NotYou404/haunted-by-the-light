@@ -44,7 +44,7 @@ ICE_DRIPSTONE_FALL_HEIGHT = 1050
 sound_horizon = arcade.load_sound(MUSIC_PATH.get("Horizon"))
 sound_sewer = arcade.load_sound(MUSIC_PATH.get("mysterious_sewer_main"))
 sound_overworld = arcade.load_sound(MUSIC_PATH.get("cut_overworld"))
-sound_dungeon = arcade.load_sound(MUSIC_PATH.get("dungeon002"))
+# sound_dungeon = arcade.load_sound(MUSIC_PATH.get("dungeon002"))
 
 
 class Window(arcade.Window):
@@ -246,7 +246,7 @@ class GameView(model.FadingView):
         self.sound_horizon = sound_horizon
         self.sound_sewer = sound_sewer
         self.sound_overworld = sound_overworld
-        self.sound_dungeon = sound_dungeon
+        # self.sound_dungeon = sound_dungeon
 
         self.window.background_color = arcade.color.FRESH_AIR
         self.on_resize(self.window.width, self.window.height)
@@ -310,9 +310,9 @@ class GameView(model.FadingView):
         self.scene["ambient"].clear()
 
     def start_background_gradient_to_obs(self) -> None:
-        arcade.stop_sound(self.active_player)
-        self.active_player.delete()
-        self.active_player = arcade.play_sound(self.sound_dungeon)
+        # arcade.stop_sound(self.active_player)
+        # self.active_player.delete()
+        # self.active_player = arcade.play_sound(self.sound_dungeon)
 
         def change_color(dt: float) -> None:
             if not self.background_gradient_to_obs:
