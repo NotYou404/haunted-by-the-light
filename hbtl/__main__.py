@@ -1,4 +1,5 @@
 import random
+import time
 from pathlib import Path
 
 import arcade
@@ -33,6 +34,7 @@ SPECTRE_SPEED_CAP = 5
 GRAVITY = 1
 JUMP_VELOCITY = 23
 CAMERA_SPEED = 0.3
+JUMP_PENDING_TIMEOUT = 0.1
 
 MAPS_PER_BIOME = 10
 BACKGROUND_GRADIENT_STEPS = 30
@@ -240,6 +242,7 @@ class GameView(model.FadingView):
         self.prepared_obs_stars = arcade.SpriteList()
         self.setup_background_gradient_switch()
         self.paused = False
+        self.jump_pending_requested = 0.0
 
         self.active_sound = None
         self.active_player = None
@@ -670,6 +673,16 @@ class GameView(model.FadingView):
         super().on_update(delta_time)
 
         if self.started and not self.ended and not self.paused:
+            # Jump input buffering
+            if (
+                time.time() - self.jump_pending_requested
+                < JUMP_PENDING_TIMEOUT
+            ):
+                if self.engine.can_jump():
+                    self.engine.jump(JUMP_VELOCITY)
+            else:
+                self.jump_pending_requested = 0.0
+
             if not self.player.change_y > 0 and self.player.state == "moving":
                 # Only gain if not jumping or going up
                 self.player.change_x += SPEED_GAIN_PER_SECOND * delta_time
@@ -890,8 +903,11 @@ class GameView(model.FadingView):
 
     def on_key_press(self, symbol: int, modifiers: int):
         if self.started:
-            if symbol == arcade.key.SPACE and self.engine.can_jump():
-                self.engine.jump(JUMP_VELOCITY)
+            if symbol == arcade.key.SPACE:
+                if self.engine.can_jump():
+                    self.engine.jump(JUMP_VELOCITY)
+                else:
+                    self.jump_pending_requested = time.time()
             elif symbol == arcade.key.ESCAPE:
                 self.paused = not self.paused
         else:
@@ -915,8 +931,11 @@ class GameView(model.FadingView):
                     elif self.pause_quit.rect.point_in_rect((x, y)):
                         self.paused = False
                         self.end()
-            elif button == arcade.MOUSE_BUTTON_LEFT and self.engine.can_jump():
-                self.engine.jump(JUMP_VELOCITY)
+            elif button == arcade.MOUSE_BUTTON_LEFT:
+                if self.engine.can_jump():
+                    self.engine.jump(JUMP_VELOCITY)
+                else:
+                    self.jump_pending_requested = time.time()
         else:
             if button == arcade.MOUSE_BUTTON_LEFT:
                 if self.show_credits.rect.point_in_rect((x, y)):
