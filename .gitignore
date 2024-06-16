@@ -5,3 +5,5 @@ __pycache__/
 *.dist/
 *.build/
 *.zip
+*.tiled-project
+*.tiled-session
