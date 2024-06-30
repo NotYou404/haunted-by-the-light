@@ -1,5 +1,7 @@
 # Haunted by the Light
 
+**I remade this in Godot: <https://github.com/TheCheese42/haunted-by-the-light-godot>**
+
 Video, screenshots and downloads can be found at <https://thecheeseknife.itch.io/haunted-by-the-light>.
 
 ## Installation
